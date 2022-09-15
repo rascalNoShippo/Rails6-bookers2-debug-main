@@ -1,7 +1,9 @@
 class BooksController < ApplicationController
 
   def show
+    @users = User.all
     @book = Book.find(params[:id])
+    @comment = Comment.new
   end
 
   def index
@@ -41,6 +43,8 @@ class BooksController < ApplicationController
     @book.destroy
     redirect_to books_path
   end
+
+
 
   private
 
