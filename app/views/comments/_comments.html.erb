@@ -1,0 +1,35 @@
+<div class="d-flex">
+  <h2>Comments</h2>
+  <h6 class="mt-auto ml-auto"><%= pluralize(@book.comments.count, "comment") %></h6>
+</div>
+<table class="table">
+  <tbody>
+    <% @book.comments.each do |comment| %>
+      <tr>
+        <td>
+          <div class="comment_header row">
+            <div class="commenter_profile col-5">
+              <%= image_tag @users.find(comment.user_id).profile_image, size: "50x50" %>
+              <span class="font-weight-bold"><%= @users.find(comment.user_id).name %></span>
+            </div>
+            <div class="comment_del_btn col-1">
+              <% if comment.user_id == current_user.id %>
+                <%= link_to book_comment_path(comment.book_id, comment.id), method: :delete, remote: true, class: "btn btn-danger", "data-confirm" => "コメントを削除しますか？" do %>
+                  <i class="fas fa-trash-alt"></i>
+                <% end %>
+              <% end %>
+            </div>
+            <div class="posted_datetime col-3 offset-3">
+              <%= comment.created_at %>
+            </div>
+          </div>
+          <div class="comment_body row">
+            <div class="col-12">
+              <%= comment.comment_body %>
+            </div>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
