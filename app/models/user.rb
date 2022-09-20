@@ -18,6 +18,10 @@ class User < ApplicationRecord
   # 与フォロー関係を通じて参照→自分がフォローしている人
   has_many :following_users, through: :relationships  , source: :follower
 
+  has_many :own_groups, class_name: "Group", foreign_key: "owner_id"
+
+  has_many :groups_participation, class_name: "Participation", foreign_key: "group_id", dependent: :destroy
+  has_many :groups, through: :groups_participation
 
 
   has_one_attached :profile_image
@@ -28,18 +32,18 @@ class User < ApplicationRecord
   def following(following) #user_a.following(user_b) => user_a has been followed by user_b
     Relationship.find_by(following_id: following.id, follower_id: id)
   end
- 
+
   def follower(follower) #user_a.follower(user_b) => user_a has been following user_b
     Relationship.find_by(following_id: id, follower_id: follower.id)
   end
-=begin  
+=begin
   def following_users
     Relationship.where(following_id: id)
   end
 
   def followed_users
     Relationship.where(follower_id: id)
-  end  
+  end
 =end
   def get_profile_image
     (profile_image.attached?) ? profile_image : 'no_image.jpg'
