@@ -16,12 +16,36 @@
             <% if @group.owner_id == current_user.id %>
               <%= " (you)" %>
               <%= link_to "Edit", edit_group_path, class: "d-flex btn btn-info align-items-center px-3 ml-3" %>
+            <% elsif @group.members.find_by(id: current_user.id).nil? %>
+              <%= link_to "Join this group", group_participations_path(@group.id), method: :post, class: "d-flex btn btn-primary align-items-center px-3 ml-3" %>
+            <% else %>
+              <%= link_to "Leave this group", group_participations_path(@group.id), method: :delete, class: "d-flex btn btn-warning align-items-center px-3 ml-3" %>
             <% end %>
           </div>
         </div>
       </div>
       <div class="ml-5">
         <p><%= @group.introduction %></p>
+      </div>
+      <div class="group_members_list mt-4">
+        <div class="d-flex">
+          <h2>Group members</h2>
+          <h6 class="mt-auto ml-auto"><%= pluralize(@members.count, "member") %></h6>
+        </div>
+        <table class="table w-50 table-striped">
+          <thead></thead>
+          <tbody>
+            <% @members.each do |member| %>
+              <tr>
+                <td>
+                  <%= link_to user_path(member.id) do %>
+                    <div><%= member.name %></div>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
       </div>
     </div>
     </div>

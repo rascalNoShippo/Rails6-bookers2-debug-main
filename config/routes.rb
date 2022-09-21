@@ -12,7 +12,9 @@ Rails.application.routes.draw do
     get "following" => "relationships#following", as: "following"
     get "followers" => "relationships#followers", as: "followers"
   end
-  resources :groups, only: [:index, :show, :edit, :new, :create, :update]
+  resources :groups, only: [:index, :show, :edit, :new, :create, :update, :destroy] do
+    resource :participations, only: [:create, :destroy]
+  end
   get "search" => "searches#search"
 
   root to: "homes#top"

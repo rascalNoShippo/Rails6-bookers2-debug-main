@@ -8,13 +8,18 @@
     </div>
     <div class='col-md-8 offset-md-1'>
       <h2>Groups</h2>
-      <table class="table">
-        <thead></thead>
+      <table class="table w-50 table-striped">
+        <thead>
+          <th class="col-5 align-middle text-center">name</th>
+          <th class="col-5 align-middle text-center">owner</th>
+          <th class="col-2 align-middle text-center">number of member</th>
+        </thead>
         <tbody>
           <% @groups.each do |item| %>
             <tr>
-              <td><%= link_to item.name, group_path(item.id), class: "d-block" %></td>
-              <td><%= link_to User.find(item.owner_id).name, user_path(item.owner_id), class: "d-block" %></td>
+              <td class="text-center"><%= link_to item.name, group_path(item.id), class: "d-block" %></td>
+              <td class="text-center"><%= link_to User.find(item.owner_id).name, user_path(item.owner_id), class: "d-block" %></td>
+              <td class="text-right"><%= item.members.count %></td>
             </tr>
           <% end %>
         </tbody>

@@ -14,6 +14,7 @@ class GroupsController < ApplicationController
 
   def show
     @group = Group.find(params[:id])
+    @members = @group.members
   end
 
   def edit
@@ -24,6 +25,11 @@ class GroupsController < ApplicationController
     @group = Group.find(params[:id])
     @group.update(group_params)
     redirect_to group_path(params[:id])
+  end
+
+  def destroy
+    Group.find(params[:id]).destroy
+    redirect_to groups_path
   end
 
   private

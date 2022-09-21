@@ -18,10 +18,10 @@ class User < ApplicationRecord
   # 与フォロー関係を通じて参照→自分がフォローしている人
   has_many :following_users, through: :relationships  , source: :follower
 
-  has_many :own_groups, class_name: "Group", foreign_key: "owner_id"
+  has_many :own_groups, class_name: "Group", foreign_key: "owner_id", dependent: :destroy
 
-  has_many :groups_participation, class_name: "Participation", foreign_key: "group_id", dependent: :destroy
-  has_many :groups, through: :groups_participation
+  has_many :groups_participation, class_name: "Participation", foreign_key: "user_id", dependent: :destroy
+  has_many :participating_groups, through: :groups_participation, source: :group
 
 
   has_one_attached :profile_image
