@@ -23,7 +23,7 @@
             <% if user.following(current_user).nil? %>
               <%= link_to "Follow", user_relationships_path(user.id), method: :post, class: "btn btn-primary font-weight-bold rounded-pill px-4"  %>
             <% else %>
-              <%= link_to "Following", user_relationships_path(user.id), method: :delete, class: "btn btn-light border-dark font-weight-bold rounded-pill px-3" %>
+              <%= link_to "Following", user_relationships_path(user.id), method: :delete, class: "btn btn-light border-dark font-weight-bold rounded-pill px-3 follow" %>
             <% end %>
           <% end %>
         </td>

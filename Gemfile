@@ -59,3 +59,5 @@ gem 'net-imap'
 gem 'net-pop'
 gem 'net-smtp'
 gem 'jquery-rails'
+
+gem 'dotenv-rails'

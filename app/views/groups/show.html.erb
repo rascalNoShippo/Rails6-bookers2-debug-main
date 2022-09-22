@@ -6,16 +6,17 @@
       <h2 class="mt-3">New book</h2>
       <%= render 'books/form', book: @book %>
     </div>
-    <div class='col-md-8 offset-md-1'>
+    <% if !@sent %>
+      <div class='col-md-8 offset-md-1'>
       <div>
         <h6 class="mb-0">Group</h6>
         <div class="d-flex justify-content-between">
           <h2 class="mb-0"><%= @group.name %></h2>
           <div class="d-flex align-items-center">
-            <%= link_to "Owner : #{User.find(@group.owner_id).name}", user_path(@group.owner_id) %>
+            <%= link_to "Owner&nbsp;: #{User.find(@group.owner_id).name}".html_safe, user_path(@group.owner_id) %>
             <% if @group.owner_id == current_user.id %>
               <%= " (you)" %>
-              <%= link_to "Edit", edit_group_path, class: "d-flex btn btn-info align-items-center px-3 ml-3" %>
+              <%= link_to "Edit", edit_group_path, class: "d-flex btn btn-outline-info align-items-center px-3 ml-3" %>
             <% elsif @group.members.find_by(id: current_user.id).nil? %>
               <%= link_to "Join this group", group_participations_path(@group.id), method: :post, class: "d-flex btn btn-primary align-items-center px-3 ml-3" %>
             <% else %>
@@ -24,29 +25,73 @@
           </div>
         </div>
       </div>
-      <div class="ml-5">
-        <p><%= @group.introduction %></p>
-      </div>
-      <div class="group_members_list mt-4">
-        <div class="d-flex">
-          <h2>Group members</h2>
-          <h6 class="mt-auto ml-auto"><%= pluralize(@members.count, "member") %></h6>
+      <% if @group.owner_id == current_user.id %>
+        <div class="ml-5 d-flex justify-content-between">
+          <p><%= @group.introduction %></p>
+          <%= link_to "Notice an event", new_group_events_path(@group.id), class: "btn btn-info" %>
         </div>
-        <table class="table w-50 table-striped">
-          <thead></thead>
-          <tbody>
-            <% @members.each do |member| %>
-              <tr>
-                <td>
-                  <%= link_to user_path(member.id) do %>
-                    <div><%= member.name %></div>
-                  <% end %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
+      <% end %>
+      <div class="d-flex mt-4">
+        <div class="group_members_list col-7">
+          <div class="d-flex">
+            <h2>Group members</h2>
+            <h6 class="mt-auto ml-auto"><%= pluralize(@members.count, "member") %></h6>
+          </div>
+          <table class="table table-striped">
+            <thead></thead>
+            <tbody>
+              <% @members.each do |member| %>
+                <tr>
+                  <td>
+                    <%= link_to user_path(member.id) do %>
+                      <div><%= member.name %></div>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <!--div class="events_list col-6">
+          <div class="d-flex">
+            <h2>Events</h2>
+            <h6 class="mt-auto ml-auto"><%#= pluralize(0, "event") %></h6>
+          </div>
+          <table class="table table-striped">
+            <thead></thead>
+            <tbody>
+              <%# @members.each do |member| %>
+                <tr>
+                  <td>
+                    <%#= link_to user_path(member.id) do %>
+                      <div><%#= member.name %></div>
+                    <%# end %>
+                  </td>
+                </tr>
+              <%# end %>
+            </tbody>
+          </table>
+        </div-->
       </div>
     </div>
+    <% else %>
+      <div class="mx-auto mt-5 mb-auto p-3 border border-success rounded bg-light shadow">
+        <h4>E-mail has been finished sending.</h4>
+        <table>
+          <tr>
+            <th class="pr-5">Group</th>
+            <td><%= Group.find(@event[:group_id]).name %></td>
+          </tr>
+          <tr>
+            <th class="pr-5">Title</th>
+            <td><%= @event[:title] %></td>
+          </tr>
+          <tr>
+            <th class="pr-5">Detail</th>
+            <td><%= @event[:detail] %></td>
+          </tr>
+        </table>
+      </div>
+    <% end %>
     </div>
 </div>

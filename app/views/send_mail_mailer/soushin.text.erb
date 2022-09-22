@@ -1,0 +1,6 @@
+<%= @name %> さん
+イベントが追加されましたのでお知らせします。
+
+グループ　：<%= Group.find(@event[:group_id]).name %>
+イベント名：<%=@event[:title] %>
+詳細　　　：<%=@event[:detail] %>

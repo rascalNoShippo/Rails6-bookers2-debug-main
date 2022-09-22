@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   end
   resources :groups, only: [:index, :show, :edit, :new, :create, :update, :destroy] do
     resource :participations, only: [:create, :destroy]
+    resource :events, only: [:new, :create]
   end
   get "search" => "searches#search"
 
