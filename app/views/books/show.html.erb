@@ -23,7 +23,7 @@
                 <%= render 'favorites/fav', book: @book %>
               </div>
               <div>
-                <p>閲覧者数：<%= "" %></p>
+                <p>閲覧者数：<%= @book.visitors.count %></p>
               </div>
             </td>
             <td>

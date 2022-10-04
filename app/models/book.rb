@@ -3,7 +3,7 @@ class Book < ApplicationRecord
   has_many :favorites, dependent: :destroy
   has_many :comments, dependent: :destroy
 
-  has_many :visiters
+  has_many :visitors
 
   validates :title,presence:true
   validates :body,presence:true,length:{maximum:200}

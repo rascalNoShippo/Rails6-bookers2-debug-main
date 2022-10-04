@@ -4,8 +4,8 @@ class BooksController < ApplicationController
     @users = User.all
     @book = Book.find(params[:id])
     @comment = Comment.new
-    unless Visiter.find_by(book_id: @book.id, visiter_id: current_user.id)
-      Visiter.create(book_id: @book.id, visiter_id: current_user.id)
+    unless Visitor.find_by(book_id: @book.id, visitor_id: current_user.id)
+      Visitor.create(book_id: @book.id, visitor_id: current_user.id)
     end
   end
 

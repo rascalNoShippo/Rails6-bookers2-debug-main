@@ -21,7 +21,7 @@
               <%= render 'favorites/fav', book: book %>
             </div>
             <p><%= book.comments.count %> コメント</p>
-            <p>閲覧者数：<%= "" %></p>
+            <p>閲覧者数：<%= book.visitors.count %></p>
         </td>
       </tr>
     <% end %>
