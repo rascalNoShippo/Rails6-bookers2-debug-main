@@ -7,10 +7,8 @@ class BooksController < ApplicationController
   end
 
   def index
-    period = 7 #days
-
     #指定期間のいいねを取得
-    favorites = Favorite.where(created_at: (Time.zone.now - period * 60 * 60 * 24)..(Time.zone.now))
+    favorites = Favorite.where(created_at: (Time.zone.now - 1.week)..(Time.zone.now))
     #日時降順でソートし、book_idを配列で取得
     arr = favorites.order(created_at: :DESC).pluck(:book_id)
     #いいねの個数順（配列内で同じ値の個数）降順

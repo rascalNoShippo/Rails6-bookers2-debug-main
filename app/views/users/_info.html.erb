@@ -28,6 +28,11 @@
     <% end %>
   <% end %>
 </div>
+<% if !user.following(current_user).nil? && !user.follower(current_user).nil? %>
+  <div class="row justify-content-center mb-3">
+    <%= link_to "chat", user_chats_path(user.id), class: "btn btn-success px-3 rounded-pill" %>
+  </div>
+<% end %>
 <div class='row'>
   <%= link_to edit_user_path(user), class: "btn btn-outline-secondary btn-block" do %>
     <i class="fas fa-user-cog"></i>Update User Info

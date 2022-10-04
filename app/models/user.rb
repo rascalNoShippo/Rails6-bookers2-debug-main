@@ -23,6 +23,8 @@ class User < ApplicationRecord
   has_many :groups_participation, class_name: "Participation", foreign_key: "user_id", dependent: :destroy
   has_many :participating_groups, through: :groups_participation, source: :group
 
+  has_many :chats_sent, class_name: "Chat", foreign_key: "sender_id", dependent: :destroy
+  has_many :chats_received, class_name: "Chat", foreign_key: "receiver_id", dependent: :destroy
 
   has_one_attached :profile_image
 
