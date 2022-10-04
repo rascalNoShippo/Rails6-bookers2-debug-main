@@ -10,17 +10,18 @@
   <tbody>
     <% books.each do |book| %>
       <tr>
-        <td><%= link_to(book.user) do %>
+        <td class="align-middle"><%= link_to(book.user) do %>
           <%= image_tag book.user.get_profile_image, size:'50x50' %>
           <% end %>
         </td>
-        <td><%= link_to book.title,book %></td>
-        <td><%= book.body %></td>
+        <td class="align-middle"><%= link_to book.title,book %></td>
+        <td class="align-middle"><%= book.body %></td>
         <td>
             <div id=<%= "fav-book-#{book.id}" %>>
               <%= render 'favorites/fav', book: book %>
             </div>
-            <p><%= book.comments.count %>コメント</p>
+            <p><%= book.comments.count %> コメント</p>
+            <p>閲覧者数：<%= "" %></p>
         </td>
       </tr>
     <% end %>

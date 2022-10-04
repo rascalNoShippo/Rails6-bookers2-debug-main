@@ -4,6 +4,9 @@ class BooksController < ApplicationController
     @users = User.all
     @book = Book.find(params[:id])
     @comment = Comment.new
+    unless Visiter.find_by(book_id: @book.id, visiter_id: current_user.id)
+      Visiter.create(book_id: @book.id, visiter_id: current_user.id)
+    end
   end
 
   def index
@@ -21,6 +24,7 @@ class BooksController < ApplicationController
   def create
     @book = Book.new(book_params)
     @book.user_id = current_user.id
+    @book.viewed_times = 0
     if @book.save
       redirect_to book_path(@book), notice: "You have created book successfully."
     else

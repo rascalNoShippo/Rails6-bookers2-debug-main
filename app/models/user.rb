@@ -26,6 +26,8 @@ class User < ApplicationRecord
   has_many :chats_sent, class_name: "Chat", foreign_key: "sender_id", dependent: :destroy
   has_many :chats_received, class_name: "Chat", foreign_key: "receiver_id", dependent: :destroy
 
+  has_many :visiters, foreign_key: "visiter_id"
+
   has_one_attached :profile_image
 
   validates :name, length: { minimum: 2, maximum: 20 }, uniqueness: true

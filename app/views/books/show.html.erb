@@ -22,6 +22,9 @@
               <div id=<%= "fav-book-#{@book.id}" %>>
                 <%= render 'favorites/fav', book: @book %>
               </div>
+              <div>
+                <p>閲覧者数：<%= "" %></p>
+              </div>
             </td>
             <td>
               <% if @book.user == current_user %>
