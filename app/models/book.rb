@@ -9,5 +9,5 @@ class Book < ApplicationRecord
   def favorited?(user)
     favorites.exists?(user_id: user.id)
   end
-
+  
 end
