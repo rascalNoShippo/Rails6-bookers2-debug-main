@@ -20,8 +20,8 @@
             <div id=<%= "fav-book-#{book.id}" %>>
               <%= render 'favorites/fav', book: book %>
             </div>
-            <p><%= book.comments.count %> コメント</p>
-            <p>閲覧者数：<%= book.visitors.count %></p>
+            <p class="m-0"><%= book.comments.count %> コメント</p>
+            <p class="m-0">閲覧者数：<%= book.visitors.count %></p>
         </td>
       </tr>
     <% end %>

@@ -1,0 +1,14 @@
+$(".get_date_search").html(`
+  <table class="table border-bottom w-50">
+    <thead>
+      <tr>
+        <th><%= params[:date].to_date.strftime("%Y年%-m月%-d日の投稿数") %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><%= @num_books %></td>
+      </tr>
+    </tbody>
+  </table>
+`);

@@ -9,6 +9,149 @@
     <div class='col-md-8 offset-md-1'>
       <h2>Books</h2>
       <%= render 'books/index',books: @books %>
+      <div>
+        <p>投稿数の前日比・前週比</p>
+        <table class="table border-bottom">
+          <thead>
+            <tr>
+              <th>今日の投稿数</th>
+              <th>前日の投稿数</th>
+              <th>前日比</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><%= @posts_today %></td>
+              <td><%= @posts_yesterday %></td>
+              <td>
+                <% if @posts_yesterday == 0 %>
+                  ---
+                <% else %>
+                  <%= "#{(@posts_today / @posts_yesterday).round(3) * 100} %" %>
+                <% end %>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <table class="table border-bottom ">
+          <thead>
+            <tr>
+              <th>今週の投稿数</th>
+              <th>前週の投稿数</th>
+              <th>前週比</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><%= @posts_this_week %></td>
+              <td><%= @posts_last_week %></td>
+              <td>
+                <% if @posts_last_week == 0 %>
+                  ---
+                <% else %>
+                  <%= "#{(@posts_this_week / @posts_last_week).round(3) * 100}" %>  
+                <% end %>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <p>7日間分の投稿数</p>
+        <table  class="table 7days_post border-bottom">
+          <thead>
+            <tr>
+              <th>6日前</th>
+              <th>5日前</th>
+              <th>4日前</th>
+              <th>3日前</th>
+              <th>2日前</th>
+              <th>昨日</th>
+              <th>本日</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><%= @user.posts_n_days_ago(6) %></td>
+              <td><%= @user.posts_n_days_ago(5) %></td>
+              <td><%= @user.posts_n_days_ago(4) %></td>
+              <td><%= @user.posts_n_days_ago(3) %></td>
+              <td><%= @user.posts_n_days_ago(2) %></td>
+              <td><%= @user.posts_n_days_ago(1) %></td>
+              <td><%= @user.posts_n_days_ago(0) %></td>
+            </tr>
+          </tbody>
+        </table>
+        <canvas id="myChart"></canvas>
+      </div>
+      <div>
+        <p>指定日の投稿数</p>
+        <%= form_with local: false, method: :get, url: user_date_path(@user) do |f| %>
+          <%= f.date_field :date, value: Time.zone.today %>
+          <%= f.submit "View" %>
+        <% end %>
+        <div class="get_date_search mt-2"></div>
+      </div>
     </div>
   </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  $(document).on('turbolinks:load', function () {
+    var ctx = document.getElementById('myChart');
+    function day(num){
+      return $(".7days_post thead th")[6 - num].innerText
+    }
+    var myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: [
+          day(6),
+          day(5),
+          day(4),
+          day(3),
+          day(2),
+          day(1),
+          day(0)],
+        datasets: [{
+          label: '# of posts',
+          data: [
+            <%= @user.posts_n_days_ago(6) %>,
+            <%= @user.posts_n_days_ago(5) %>,
+            <%= @user.posts_n_days_ago(4) %>,
+            <%= @user.posts_n_days_ago(3) %>,
+            <%= @user.posts_n_days_ago(2) %>,
+            <%= @user.posts_n_days_ago(1) %>,
+            <%= @user.posts_n_days_ago(0) %>          
+          ],
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 101, 178, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255, 101, 178, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  });
+</script>

@@ -10,8 +10,9 @@ class BooksController < ApplicationController
   end
 
   def index
+    now = Time.zone.now
     #指定期間のいいねを取得
-    favorites = Favorite.where(created_at: (Time.zone.now - 1.week)..(Time.zone.now))
+    favorites = Favorite.where(created_at: (now.days_ago(6).at_beginning_of_day)..(now.at_end_of_day))
     #日時降順でソートし、book_idを配列で取得
     arr = favorites.order(created_at: :DESC).pluck(:book_id)
     #いいねの個数順（配列内で同じ値の個数）降順
@@ -19,6 +20,7 @@ class BooksController < ApplicationController
     books_remainder = Book.all - books_searched
     @books = books_searched + books_remainder
     @book = Book.new
+
   end
 
   def create
@@ -63,3 +65,4 @@ class BooksController < ApplicationController
     params.require(:book).permit(:title, :body)
   end
 end
+

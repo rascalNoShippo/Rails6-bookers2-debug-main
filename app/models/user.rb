@@ -49,6 +49,11 @@ class User < ApplicationRecord
     Relationship.where(follower_id: id)
   end
 =end
+
+  def posts_n_days_ago(num)
+    self.books.count{|x| (Time.zone.today.days_ago(num).at_beginning_of_day..Time.zone.today.days_ago(num).at_end_of_day).cover?(x.created_at)}
+  end
+
   def get_profile_image
     (profile_image.attached?) ? profile_image : 'no_image.jpg'
   end
