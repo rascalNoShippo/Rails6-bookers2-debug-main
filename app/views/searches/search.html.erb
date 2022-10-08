@@ -8,22 +8,26 @@
     </div-->
     <div class='col-md-8 offset-md-1'>
       <h2>Results index</h2>
-      <table class="table table-hover table-inverse">
-        <tbody>
-          <% @lists.each do |item| %>
-            <tr>
-              <td>
-                <%= link_to "#{params[:model].pluralize.downcase}/#{item.id}" do %>
-                  <div class="d-flex row">
-                    <div class="col-3"><%= item.send(@col_1) %></div>
-                    <div class="col-9"><%= item.send(@col_2) %></div>
-                  </div>
-                <% end %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+      <% if params[:search] == "検索" %>
+        <table class="table table-hover table-inverse">
+          <tbody>
+            <% @lists.each do |item| %>
+              <tr>
+                <td>
+                  <%= link_to "#{params[:model].pluralize.downcase}/#{item.id}" do %>
+                    <div class="d-flex row">
+                      <div class="col-3"><%= item.send(@col_1) %></div>
+                      <div class="col-9"><%= item.send(@col_2) %></div>
+                    </div>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% elsif params[:search] == "タグ検索" %>
+        <%= render 'books/index', books: @lists %>
+      <% end %>
     </div>
   </div>
 </div>

@@ -1,11 +1,20 @@
 class SearchesController < ApplicationController
   
   def search
-    @lists = looks(params[:search_method], params[:query])
+    if params[:search] == "検索"
+      @lists = looks(params[:search_method], params[:query])
+    elsif params[:search] == "タグ検索"
+      tag = Tag.find_by(name: params[:tag])
+      if tag.nil?
+        @lists = []
+      else
+        @lists = tag.books
+      end
+    end
   end
   
   def looks(search_method, query) 
-    list = {"Book" => [Book.all, "title", "body"], "User" => [User.all, "name", "introduction"]}
+    list = {"Book" => [Book.all, "title", "body"], "User" => [User.all, "name", "introduction"], }
     model = list[params[:model]][0]
     @col_1 = list[params[:model]][1]
     @col_2 = list[params[:model]][2]

@@ -11,14 +11,14 @@
     		<h2>Book detail</h2>
     		<table class='table'>
     		  <tr>
-            <td ><%= link_to(@book.user) do %>
+            <td rowspan="2" class="col-2"><%= link_to(@book.user) do %>
               <%= image_tag @book.user.get_profile_image, size:"100x100" %><br>
               <%= @book.user.name %>
               <% end %>
             </td>
-            <td><%= link_to @book.title, @book %></td>
-            <td><%= @book.body %></td>
-            <td>
+            <td rowspan="2" class="col-2"><%= link_to @book.title, @book %></td>
+            <td rowspan="2" class="col-3"><%= @book.body %></td>
+            <td class="col-3">
               <div id=<%= "fav-book-#{@book.id}" %>>
                 <%= render 'favorites/fav', book: @book %>
               </div>
@@ -34,6 +34,21 @@
             <td>
               <% if @book.user == current_user %>
                 <%= link_to 'Destroy', @book, method: :delete, data: { confirm: '本当に消しますか？' }, class: "btn btn-sm btn-danger"%>
+              <% end %>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3">
+              <%= render "books/evaluation", book: @book %>
+            </td>
+          </tr>
+          <tr>
+            <td class="h6 font-weight-bold">
+              <%= pluralize(@book.tags.count, "Tag") %>
+            </td>
+            <td colspan="5">
+              <% @book.tags.each do |tag| %>
+                <%= link_to tag.name, search_path(tag: tag.name, search: "タグ検索") %>
               <% end %>
             </td>
           </tr>

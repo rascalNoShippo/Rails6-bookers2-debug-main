@@ -6,7 +6,9 @@ Rails.application.routes.draw do
   resources :books, only: [:index, :show, :edit, :create, :destroy, :update] do
     resource :favorites, only: [:create, :destroy]
     resources :comments, only: [:create, :destroy]
+
   end
+  
   resources :users, only: [:index, :show, :edit, :update] do
     resource :relationships, only: [:create, :destroy]
     get "following" => "relationships#following", as: "following"

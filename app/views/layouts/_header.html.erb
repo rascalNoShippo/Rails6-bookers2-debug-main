@@ -3,12 +3,18 @@
     <div class="container">
       <a class="navbar-brand" href="/"><span>Bookers</span></a>
       <% if user_signed_in? %>
-        <div class="search_form">
+        <div class="search_form mr-1">
           <%= form_with url: search_path, local: true, method: :get, class: "d-flex align-items-center" do |f| %>
-            <%= f.text_field :query, class: "form-control" %>
+            <%= f.text_field :query, class: "form-control w-50", value: params[:query] %>
             <%= f.select :model, options_for_select([['User'], ['Book']]), class: "form-select" %>
             <%= f.select :search_method, options_for_select([["完全一致","perfect"], ["前方一致","forward"],  ["後方一致","backward"], ["部分一致","partial"]]), class: "form-select" %>
-            <%= f.submit "検索",name: nil, class: "btn btn-primary" %>
+            <%= f.submit "検索", name: "search", class: "btn btn-primary " %>
+          <% end %>
+        </div>
+        <div class="tag_search_form">
+          <%= form_with url: search_path, local: true, method: :get, class: "d-flex align-items-center" do |f| %>
+            <%= f.text_field :tag, class: "form-control w-50", value: params[:tag] %>
+            <%= f.submit "タグ検索", name: "search", class: "btn btn-primary " %>
           <% end %>
         </div>
       <% end %>
