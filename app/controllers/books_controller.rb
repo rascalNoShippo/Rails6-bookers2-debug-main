@@ -32,15 +32,9 @@ class BooksController < ApplicationController
   def create
     @book = Book.new(book_params)
     @book.user_id = current_user.id
-    tags = params[:book][:tag_name].split(" ")
+
     if @book.save
-      tags.each do |t|
-        if Tag.find_by(name: t).nil?
-          Tag.new(name: t).save
-        end
-        tag = Tag.find_by(name: t)
-        @book.tags_relationships.new(tag_id: tag.id).save
-      end
+      save_tags
       redirect_to book_path(@book), notice: "You have created book successfully."
     else
       @books = Book.all
@@ -58,6 +52,7 @@ class BooksController < ApplicationController
   def update
     @book = Book.find(params[:id])
     if @book.update(book_params)
+      save_tags
       redirect_to book_path(@book), notice: "You have updated book successfully."
     else
       render "edit"
@@ -70,7 +65,27 @@ class BooksController < ApplicationController
     redirect_to books_path
   end
 
+  def save_tags
+    tags = params[:book][:tag_name].split(" ")
+    tags.each do |t|
+      if Tag.find_by(name: t).nil?
+        Tag.new(name: t).save
+      end
+      tag = Tag.find_by(name: t)
+      if @book.tags.length > 0
+        @book.tags_relationships.destroy_all
+      end
+      @book.tags_relationships.new(tag_id: tag.id).save
+    end
+  end
 
+  def tags_value
+    if params[:book][:tag_name].nil?
+      self.tags.pluck(:name)
+    else
+      params[:book][:tag_name]
+    end
+  end
 
   private
 
