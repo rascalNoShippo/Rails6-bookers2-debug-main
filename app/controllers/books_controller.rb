@@ -32,6 +32,7 @@ class BooksController < ApplicationController
   def create
     @book = Book.new(book_params)
     @book.user_id = current_user.id
+    @tags_value = tags_value
 
     if @book.save
       save_tags
@@ -44,6 +45,7 @@ class BooksController < ApplicationController
 
   def edit
     @book = Book.find(params[:id])
+    @tags_value = @book.tags.pluck(:name).join(" ")
     if @book.user != current_user
       redirect_to books_path
     end
@@ -51,6 +53,7 @@ class BooksController < ApplicationController
 
   def update
     @book = Book.find(params[:id])
+    @tags_value = tags_value
     if @book.update(book_params)
       save_tags
       redirect_to book_path(@book), notice: "You have updated book successfully."
@@ -68,23 +71,17 @@ class BooksController < ApplicationController
   def save_tags
     tags = params[:book][:tag_name].split(" ")
     tags.each do |t|
-      if Tag.find_by(name: t).nil?
-        Tag.new(name: t).save
-      end
+      if Tag.find_by(name: t).nil? then Tag.new(name: t).save end
       tag = Tag.find_by(name: t)
-      if @book.tags.length > 0
-        @book.tags_relationships.destroy_all
-      end
-      @book.tags_relationships.new(tag_id: tag.id).save
+      if @book.tags_relationships.find_by(tag_id: tag.id).nil? then @book.tags_relationships.new(tag_id: tag.id).save end
+    end
+    @book.tags.each do |t|
+      unless tags.include?(t.name) then @book.tags_relationships.find_by(tag_id: t.id).destroy end
     end
   end
 
   def tags_value
-    if params[:book][:tag_name].nil?
-      self.tags.pluck(:name)
-    else
-      params[:book][:tag_name]
-    end
+    params[:book][:tag_name].nil? ? self.tags.pluck(:name).join(" ") : params[:book][:tag_name]
   end
 
   private
