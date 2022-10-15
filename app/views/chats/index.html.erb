@@ -22,8 +22,8 @@
             </div>
           <% elsif item.sender_id == current_user.id %>
             <div class="text-right mb-3">
-              <div class="bg-success bg-gradient text-white rounded d-inline-block px-3 py-1">
-                <%= item.body %>
+              <div class="bg-success bg-gradient text-white rounded d-inline-block px-3 py-1 text-left">
+                <%= safe_join(item.body.split("\r\n"),tag(:br)) %>
               </div>
               <div>
                 <%= item.created_at.strftime("%-k:%M, %b. %d, %Y") %>
@@ -36,7 +36,7 @@
         <div class="post_form mt-3" >
           <%= form_with model: @chat, url: user_chats_path,mehotd: :post, local: true, class: "d-flex" do |f| %>
             <div class="form-group col-10"> 
-              <%= f.text_field :body, class: 'form-control' %>
+              <%= f.text_area :body, class: 'form-control' %>
             </div>
             <div class="form-group col-2 px-0">
               <%= f.submit "Post", class: 'btn btn-success px-4 mx-auto' %>

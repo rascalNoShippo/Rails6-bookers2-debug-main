@@ -4,9 +4,7 @@ class BooksController < ApplicationController
     @users = User.all
     @book = Book.find(params[:id])
     @comment = Comment.new
-    unless Visitor.find_by(book_id: @book.id, visitor_id: current_user.id)
-      Visitor.create(book_id: @book.id, visitor_id: current_user.id)
-    end
+    Visitor.create(book_id: @book.id, visitor_id: current_user.id) unless Visitor.find_by(book_id: @book.id, visitor_id: current_user.id)
   end
 
   def index
@@ -46,9 +44,7 @@ class BooksController < ApplicationController
   def edit
     @book = Book.find(params[:id])
     @tags_value = @book.tags.pluck(:name).join(" ")
-    if @book.user != current_user
-      redirect_to books_path
-    end
+    redirect_to books_path if @book.user != current_user
   end
 
   def update
@@ -73,10 +69,10 @@ class BooksController < ApplicationController
     tags.each do |t|
       if Tag.find_by(name: t).nil? then Tag.new(name: t).save end
       tag = Tag.find_by(name: t)
-      if @book.tags_relationships.find_by(tag_id: tag.id).nil? then @book.tags_relationships.new(tag_id: tag.id).save end
+      @book.tags_relationships.new(tag_id: tag.id).save if @book.tags_relationships.find_by(tag_id: tag.id).nil?
     end
     @book.tags.each do |t|
-      unless tags.include?(t.name) then @book.tags_relationships.find_by(tag_id: t.id).destroy end
+      @book.tags_relationships.find_by(tag_id: t.id).destroy unless tags.include?(t.name)
     end
   end
 
